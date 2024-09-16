@@ -2,7 +2,7 @@ CXX = g++
 
 CXXFLAGS = -std=c++11 -Wall -Wextra -O2
 
-TARGET = parser
+TARGET = packetGenerator
 
 SRCS = $(wildcard *.cpp)
 

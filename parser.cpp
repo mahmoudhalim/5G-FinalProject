@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <fstream>
 #include <algorithm>
+#include "parser.hpp"
 using std::string;
 using std::unordered_map;
 
@@ -33,24 +34,4 @@ unordered_map<string, unordered_map<string, string>> parseFile(const string &inp
     }
 
     return dict;
-}
-
-int main(int argc, char* argv[])
-{
-    std::string input = argv[1];
-
-    unordered_map<string, unordered_map<string, string>> attributes = parseFile(input);
-
-    // Print the parsed attributes
-    for (const auto &object : attributes)
-    {
-        std::cout << object.first << " {\n";
-        for (const auto &pair : object.second)
-        {
-            std::cout << pair.first << " : " << pair.second << std::endl;
-        }
-        std::cout << "}\n";
-    }
-
-    return 0;
 }
