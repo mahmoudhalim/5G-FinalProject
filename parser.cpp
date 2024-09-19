@@ -22,7 +22,11 @@ unordered_map<string, unordered_map<string, string>> parseFile(const string &inp
     while (std::getline(stream, line))
     {
         line = removeWhiteSpace(line);
-        size_t pos = line.find(".");
+        // remove comments
+        size_t pos = line.find('/');
+        line = line.substr(0, pos);
+        
+        pos = line.find(".");
         if (pos == string::npos) continue;
         string object = line.substr(0, pos);
         string data = line.substr(pos + 1);
