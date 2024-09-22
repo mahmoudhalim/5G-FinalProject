@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 #include <unordered_map>
 #if !defined(EthPacket_H)
 #define EthPacket_H
@@ -15,8 +16,8 @@ private:
     int BurstSize;
     int BurstPeriodicity_us;
     unsigned int TotalPackets;
+    std::vector<int> CRCTable;
 
-    void SetTotalPackets();
     std::string GeneratePacket();
     std::string GetCRC();
     std::string GetIFGs(int packetSize);
