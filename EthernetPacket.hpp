@@ -17,13 +17,14 @@ private:
     int BurstPeriodicity_us;
     unsigned int TotalPackets;
     int BurstMode;
-    std::vector<int> CRCTable;
 
-    std::string GetCRC();
+    long GetCRC(const std::string &data);
     std::string GetIFGs(int packetSize);
+    void GenerateCRCTable();
 
 public:
-    EthernetPacket(std::unordered_map <std::string, std::string> EthConfig);
+    static unsigned int CRCTable[256];
+    EthernetPacket(std::unordered_map<std::string, std::string> EthConfig);
     ~EthernetPacket();
     void WriteFile(std::string output_file, std::unordered_map<std::string, std::string> OranConfig);
     std::vector<std::string> GeneratePacket(std::unordered_map<std::string, std::string> OranConfig, int NumberOfFrames);

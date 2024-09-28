@@ -6,6 +6,18 @@
 const long PREAMBLE = 0xFB555555555555D5;
 const long ETHERTYPE = 0xAEFE; // eCPRI
 
+std::vector<unsigned char> hexStringToBytes(const std::string &hex)
+{
+    std::vector<unsigned char> bytes;
+    for (size_t i = 0; i < hex.length(); i += 2)
+    {
+        std::string byteString = hex.substr(i, 2);
+        unsigned char byte = static_cast<unsigned char>(strtol(byteString.c_str(), nullptr, 16));
+        bytes.push_back(byte);
+    }
+    return bytes;
+}
+unsigned int EthernetPacket::CRCTable[256] = {0};
 EthernetPacket::EthernetPacket(std::unordered_map<std::string, std::string> EthConfig)
 {
     LineRate = std::stod(EthConfig["LineRate"]);
@@ -17,6 +29,7 @@ EthernetPacket::EthernetPacket(std::unordered_map<std::string, std::string> EthC
     BurstSize = 0;
     BurstPeriodicity_us = CaptureSizeMs * 1000;
     BurstMode = 0;
+    GenerateCRCTable();
 }
 
 EthernetPacket::~EthernetPacket()
@@ -98,7 +111,7 @@ std::vector<std::string> EthernetPacket::GeneratePacket(std::unordered_map<std::
         else
             packet << eCPRIPackets.at(i);
 
-        packet << GetCRC();
+        packet << GetCRC(packet.str().substr(16));
         packet << GetIFGs(packet.str().size() + this->MinNumOfIFGSPerPacket * 2);
         EthPackets.push_back(packet.str());
         packet.str("");
@@ -109,9 +122,30 @@ std::vector<std::string> EthernetPacket::GeneratePacket(std::unordered_map<std::
     return EthPackets;
 }
 
-std::string EthernetPacket::GetCRC()
+ long EthernetPacket::GetCRC(const std::string &input){
+     long crc = 0xFFFFFFFF;
+     std::vector<unsigned char> data = hexStringToBytes(input);
+     for (size_t i = 16; i < data.size(); i += 1)
+     {
+         unsigned long index = (crc ^ data[i]) & 0xFF;
+         crc = (crc >> 8) ^ CRCTable[index];
+    }
+    return crc ^ 0xFFFFFFFF;
+}
+void EthernetPacket::GenerateCRCTable()
 {
-    return "DEADBEEF"; // TODO
+    for (size_t i = 0; i < 256; ++i)
+    {
+        unsigned long crc = i;
+        for (size_t j = 0; j < 8; ++j)
+        {
+            if (crc & 1)
+                crc = (crc >> 1) ^ 0x04C11DB7;
+            else
+                crc >>= 1;
+        }
+        CRCTable[i] = crc;
+    }
 }
 std::string EthernetPacket::GetIFGs(int packetSize)
 {
