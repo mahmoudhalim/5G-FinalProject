@@ -17,7 +17,7 @@ private:
 public:
     ORANPacket(std::unordered_map<std::string, std::string> OranConfig);
     ~ORANPacket();
-    std::vector<std::string> GeneratePacket(int NumberOfFrames);
+    std::vector<std::string> GeneratePacket(int NumberOfFrames, unsigned int size);
 };
 
 #endif // ORAN_HPP

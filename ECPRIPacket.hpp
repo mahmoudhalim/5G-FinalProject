@@ -17,7 +17,7 @@ public:
     static unsigned char SeqID;
     ECPRIPacket();
     ~ECPRIPacket();
-    std::vector<std::string> GeneratePacket(std::unordered_map<std::string, std::string> OranConfig, int NumberOfFrames);
+    std::vector<std::string> GeneratePacket(std::unordered_map<std::string, std::string> OranConfig, int NumberOfFrames, unsigned int size);
 };
 
 #endif // ECPRI_H

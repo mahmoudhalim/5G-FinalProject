@@ -93,7 +93,7 @@ std::vector<std::string> EthernetPacket::GeneratePacket(std::unordered_map<std::
 {
     std::vector<std::string> EthPackets;
     ECPRIPacket *ecpri = new ECPRIPacket();
-    std::vector<std::string> eCPRIPackets = ecpri->GeneratePacket(OranConfig, NumberOfFrames);
+    std::vector<std::string> eCPRIPackets = ecpri->GeneratePacket(OranConfig, NumberOfFrames, MaxPacketSize - 22);
     std::stringstream packet;
     for (size_t i = 0; i < eCPRIPackets.size(); i++)
     {

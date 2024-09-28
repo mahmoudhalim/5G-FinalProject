@@ -29,7 +29,7 @@ std::string ORANPacket::ReadPayloadFile()
     return payload.str();
 }
 
-std::vector<std::string> ORANPacket::GeneratePacket(int NumberOfFrames)
+std::vector<std::string> ORANPacket::GeneratePacket(int NumberOfFrames, unsigned int size)
 {
     std::vector<std::string> Packets;
     std::stringstream packet;
@@ -68,7 +68,13 @@ std::vector<std::string> ORANPacket::GeneratePacket(int NumberOfFrames)
         startPrbu %= NrbPerPacket;
 
         packet << std::hex << std::setw(2) << std::setfill('0') << (octet16 & 0xFF);
-        packet << payload.substr(i * NrbPerPacket, octet16);
+        packet << payload.substr(i * NrbPerPacket, octet16 * 12);
+        // Check Size
+        std::cout << packet.str().size() / 2 << std::endl;
+        if(packet.str().size() / 2 > size){
+            std::cerr << "packetGenerator: O-RAN Packet size exceeds available size. Consider using smaller value of NrbPerPacket\n";
+            return -1;
+        }
         Packets.push_back(packet.str());
         packet.str("");
         packet.clear();

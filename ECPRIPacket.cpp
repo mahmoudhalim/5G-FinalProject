@@ -6,17 +6,17 @@ unsigned char ECPRIPacket::SeqID = 0x00;
 ECPRIPacket::ECPRIPacket()
 {
     Message = "00";
-    PC_RTC = "00";
+    PC_RTC = "0000";
 }
 
 ECPRIPacket::~ECPRIPacket()
 {
 }
 
-std::vector<std::string> ECPRIPacket::GeneratePacket(std::unordered_map<std::string, std::string> OranConfig, int NumberOfFrames)
+std::vector<std::string> ECPRIPacket::GeneratePacket(std::unordered_map<std::string, std::string> OranConfig, int NumberOfFrames, unsigned int size)
 {
     ORANPacket *oran = new ORANPacket(OranConfig);
-    std::vector<std::string> OranPackets = oran->GeneratePacket(NumberOfFrames);
+    std::vector<std::string> OranPackets = oran->GeneratePacket(NumberOfFrames,size - 7);
     std::vector<std::string> eCPRIPackets;
     std::stringstream packet;
     for (size_t i = 0; i < OranPackets.size(); i++)
