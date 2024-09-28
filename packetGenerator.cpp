@@ -5,6 +5,8 @@
 #include <algorithm>
 #include "parser.hpp"
 #include "EthernetPacket.hpp"
+#include "ORANPacket.hpp"
+#include "ECPRIPacket.hpp"
 using std::string;
 using std::unordered_map;
 
@@ -32,7 +34,7 @@ int main(int argc, char *argv[])
     //     std::cout << "}\n";
     // }
     EthernetPacket *eth = new EthernetPacket(config["Eth"]);
-    std::cout << eth->ToString();
-    eth->WriteFile(output);
+    // std::cout << eth->ToString();
+    eth->WriteFile(output, config["Oran"]);
     return 0;
 }
